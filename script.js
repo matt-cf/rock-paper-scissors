@@ -1,4 +1,12 @@
 choiceArray = ['Rock', 'Paper', 'Scissors'];
+let playerScore = 0;
+let computerScore = 0;
+const container = document.querySelector('#container');
+const btns = document.querySelectorAll('button');
+const result = document.createElement('p');
+const declaration = document.createElement('h2');
+const pScoreDisplay = document.createElement('h2');
+const cScoreDisplay = document.createElement('h2');
 
 
 function getComputerChoice() {
@@ -8,42 +16,66 @@ function getComputerChoice() {
     return computerSelection;
 }
 
-let playerScore = 0;
-let computerScore = 0;
+btns.forEach((button) => {
+    button.addEventListener('click', playRound);
+})
 
 function playRound() {
-    let playerChoice = prompt("Rock, paper, scissors?");
+    playerChoice = this.id;
     playerChoice = playerChoice.toLowerCase();
     let computerChoice = getComputerChoice();
     if (playerChoice == computerChoice) {
-        console.log("draw");
+        result.textContent = 'it\'s a tie';
+        container.appendChild(result);
     } else if (playerChoice == "rock" && computerChoice == "paper") {
-        console.log(`You lost. You used ${playerChoice} and the computer used ${computerChoice}.`);
-        computerScore++;
+        result.textContent = 'you lost; paper beats rock';
+        container.appendChild(result);
+        ++computerScore;
     } else if (playerChoice == "paper" && computerChoice == "scissors") {
-        console.log(`You lost. You used ${playerChoice} and the computer used ${computerChoice}.`);
-        computerScore++;
+        result.textContent = 'you lost; scissors beats paper';
+        container.appendChild(result);
+        ++computerScore;
     } else if (playerChoice == "scissors" && computerChoice == "rock") {
-        console.log(`You lost. You used ${playerChoice} and the computer used ${computerChoice}.`);
-        computerScore++;
-    } else {
-        console.log(`You won. You used ${playerChoice} and the computer used ${computerChoice}.`);
-        playerScore++;
+        result.textContent = 'you lost; rock beats scissors';
+        container.appendChild(result);
+        ++computerScore;
+    } else if (playerChoice == "paper" && computerChoice == "rock") {
+        result.textContent = 'you won; paper beats rock';
+        container.appendChild(result);
+        ++playerScore;
+    } else if (playerChoice == "scissors" && computerChoice == "paper") {
+        result.textContent = 'you won; scissors beats paper';
+        container.appendChild(result);
+        ++playerScore;
+    } else if (playerChoice == "rock" && computerChoice == "scissors") {
+        result.textContent = 'you won; rock beats scissors';
+        container.appendChild(result);
+        ++playerScore;
+    }
+    if (playerScore === 5 || computerScore == 5) {
+        declareWinner();
+    }
+    scoreTally();
+    if (playerScore === 5 || computerScore == 5) {
+        playerScore = 0;
+        computerScore = 0;
     }
     return;
+
 }
 
-function game() {
-    for (let i = 0; i < 5; i++){
-    playRound();
-    }
+function declareWinner () {
     if (playerScore > computerScore) {
-        console.log(`The player has won the game by winning ${playerScore} round(s)!`)
-    } else if (playerScore > computerScore) {
-        console.log(`The computer has won the game by winning ${computerScore} round(s)!`)
+        declaration.textContent = 'Player won!';
     } else {
-        console.log(`It is a draw! Both players won ${playerScore} round(s)!`)
+        declaration.textContent = 'Computer won!';
     }
-    playerScore = 0;
-    computerScore = 0;
+    container.appendChild(declaration);
 }
+
+function scoreTally () {
+    pScoreDisplay.textContent = 'player score ' + playerScore;
+    cScoreDisplay.textContent = 'computer score ' + computerScore;
+    container.appendChild(pScoreDisplay);
+    container.appendChild(cScoreDisplay);
+} 
